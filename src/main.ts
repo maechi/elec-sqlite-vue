@@ -13,9 +13,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 // todo sqlite db
-sequelize.authenticate().then(() => console.log("connected")
-).catch((err: any) => console.log(err))
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
 
-const app = createApp(App)
-app.use(router).mount('#app')
+        const app = createApp(App)
+        app.use(router).mount('#app')
+    })
+    .catch(error => {
+        console.log('Unable to connect to the database:', error);
+        console.error('Unable to connect to the database:', error);
+    })
+
+
 
