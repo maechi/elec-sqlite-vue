@@ -1,6 +1,8 @@
 // todo define models here, or use a separate file for defining models and import them here!!!
 import {DataTypes, Model} from "sequelize";
 import {sequelize} from "@/getdb";
+import {importDemoData} from "@/dbData";
+
 
 class User extends Model {
     public firstName!: string | null;
@@ -187,7 +189,20 @@ Achievement.belongsTo(Achcat, {foreignKey: 'categoryId', onDelete: 'RESTRICT', o
 
 // use sync to create tables
 sequelize.sync({alter: true})
-    .then(response => console.log("Relations response", response))
+    .then(response => {
+        console.log("Relations response", response);
+        Server.findAll()
+            .then(response => {
+                console.log("Server.findAllResponse", response)
+                if(response.length == 0) {
+                    console.log("ImportDemoData")
+                    importDemoData()
+                }
+                else {
+                    console.log("NoImportDemoData")
+                }
+            })
+    })
     .catch(error => console.log("relations error", error))
 
 export { User, Server, Tribe, Achcat, Achopt, Achievement, Character }
