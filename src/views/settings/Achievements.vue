@@ -123,9 +123,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="achievement_data in this.allData" :key="achievement_data.id" @click="this.chooseAchievement(achievement_data)">
+    <tr v-for="achievement_data in this.allData" :key="achievement_data.id" @click="this.chooseAchievement(achievement_data)" :class="{ 'table-active': achievement_data.id == this.achievement.id }">
       <td>{{ achievement_data.id }}</td>
-      <td><pre>{{ achievement_data }}</pre></td>
+      <td><span :title="'categoryId: ' + achievement_data.categoryId">{{ achievement_data.Achcat.achcatName }}</span></td>
       <td>{{ achievement_data.achievementName}}</td>
       <td>{{ achievement_data.bonusLevel}}</td>
       <td>{{ achievement_data.singleMode}}</td>

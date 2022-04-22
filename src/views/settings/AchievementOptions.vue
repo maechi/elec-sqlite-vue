@@ -60,9 +60,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="achopt_data in this.allData" :key="achopt_data.id" @click="this.chooseAchopt(achopt_data)">
+    <tr v-for="achopt_data in this.allData" :key="achopt_data.id" @click="this.chooseAchopt(achopt_data)" :class="{ 'table-active': achopt_data.id == this.achopt.id }">
       <td>{{ achopt_data.id }}</td>
-      <td>{{ achopt_data.categoryId }} <pre>{{ achopt_data }}</pre></td>
+      <td><span :title="'categoryId: ' + achopt_data.categoryId">{{ achopt_data.Achcat.achcatName }}</span></td>
       <td>{{ achopt_data.achoptName}}</td>
     </tr>
     </tbody>

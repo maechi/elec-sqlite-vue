@@ -41,7 +41,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="achcat_data in this.allData" :key="achcat_data.id" @click="this.chooseAchcat(achcat_data)">
+    <tr v-for="achcat_data in this.allData" :key="achcat_data.id" @click="this.chooseAchcat(achcat_data)" :class="{ 'table-active': achcat_data.id == this.achcat.id }">
       <td>{{ achcat_data.id }}</td>
       <td>{{ achcat_data.achcatName }}</td>
     </tr>

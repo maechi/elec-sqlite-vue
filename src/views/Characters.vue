@@ -51,7 +51,7 @@
   </div>
   <br/>
 
-  <table>
+  <table class="table table-hover">
     <thead>
     <tr>
       <th>Id</th>

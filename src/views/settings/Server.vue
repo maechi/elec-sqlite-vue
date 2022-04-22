@@ -59,7 +59,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="server_data in this.allData" :key="server_data.id" @click="this.chooseServer(server_data)">
+    <tr v-for="server_data in this.allData" :key="server_data.id" @click="this.chooseServer(server_data)" :class="{ 'table-active': server_data.id == this.server.id }">
       <td>{{ server_data.id }}</td>
       <td>{{ server_data.serverName }}</td>
       <td>{{ server_data.mapName }}</td>
