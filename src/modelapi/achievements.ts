@@ -19,7 +19,7 @@ class NewAchievement {
 }
 
 const getAllAchievements = async () => {
-    const achievements = await Achievement.findAll()
+    const achievements = await Achievement.findAll({include: Achcat})
     return achievements
 }
 
