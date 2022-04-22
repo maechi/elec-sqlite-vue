@@ -8,27 +8,36 @@
   <table class="table">
     <thead>
     <tr>
-      <th>Character</th>
-      <th v-for="achievement_data in this.allAchievements" :key="achievement_data.id">{{ achievement_data.achievementName}}</th>
+      <th>Achievement</th>
+      <th v-for="character_data in this.allCharacters" :key="character_data.id">{{ character_data.characterName}}</th>
     </tr>
     </thead>
     <tbody>
-    <tr v-for="character_data in this.allCharacters" :key="character_data.id">
-      <td>{{ character_data.characterName }}</td>
-      <td v-for="achievement_data in this.allAchievements" :key="achievement_data.id"> xxx </td>
+    <tr v-for="achievement_data in this.allAchievements" :key="achievement_data.id">
+      <td>{{ achievement_data.achievementName }}</td>
+      <td v-for="character_data in this.allCharacters" :key="character_data.id">
+        CAC <br/>
+        <CharacterAchievementCell :character="character_data" :achievement="achievement_data" />
+      </td>
     </tr>
+
     </tbody>
   </table>
 
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
-import {createCharacter, destroyCharacter, getAllCharacters, NewCharacter, updateCharacter} from "@/modelapi/character";
-import {getAllAchievements} from "@/modelapi/achievements";
+import { defineComponent } from "vue";
+import {getAllCharacters} from "@/modelapi/character";
+import {getAllAchievementsWithOptions} from "@/modelapi/achievements";
+
+import CharacterAchievementCell from './partials/CharacterAchievementCell.vue';
 
 export default defineComponent({
   name: "Achievements",
+  components: {
+    CharacterAchievementCell
+  },
   data() {
     return{
       allCharacters: {},
@@ -47,7 +56,7 @@ export default defineComponent({
               })
     },
     loadAchievements: function () {
-      getAllAchievements()
+      getAllAchievementsWithOptions()
               .then(response => {
                 console.log("loadAchievements response", response)
                 this.allAchievements = response

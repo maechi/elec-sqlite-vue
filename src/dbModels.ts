@@ -18,12 +18,11 @@ User.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    }, {
+}, {
     tableName: "users",
     sequelize
 });
-User.sync()
-
+//User.sync()
 
 
 class Server extends Model {
@@ -46,10 +45,7 @@ Server.init({
     tableName: "servers",
     sequelize
 });
-Server.sync()
-
-
-
+//Server.sync()
 
 
 class Tribe extends Model {
@@ -71,9 +67,7 @@ Tribe.init({
     tableName: "tribes",
     sequelize
 });
-Tribe.sync()
-
-
+//Tribe.sync()
 
 
 class Achcat extends Model {
@@ -90,8 +84,7 @@ Achcat.init({
     tableName: "achcat",
     sequelize
 });
-Achcat.sync()
-
+//Achcat.sync()
 
 
 class Achopt extends Model {
@@ -102,8 +95,7 @@ class Achopt extends Model {
 Achopt.init({
     achoptName: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+        allowNull: false
     },
     categoryId: {
         type: DataTypes.NUMBER,
@@ -113,13 +105,13 @@ Achopt.init({
     tableName: "achopt",
     sequelize
 });
-Achopt.sync()
+//Achopt.sync()
 
 
 class Achievement extends Model {
     public achievementName!: string;
     public categoryId!: number | null;
-    public bonusLevel!: boolean;
+    public bonusLevel!: number;
     public singleMode!: boolean;
     public showSum!: boolean;
     public id!: number;
@@ -135,8 +127,9 @@ Achievement.init({
         allowNull: false
     },
     bonusLevel: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
+        type: DataTypes.NUMBER,
+        allowNull: true,
+        defaultValue: null
     },
     singleMode: {
         type: DataTypes.BOOLEAN,
@@ -150,8 +143,7 @@ Achievement.init({
     tableName: "achievement",
     sequelize
 });
-Achievement.sync()
-
+//Achievement.sync()
 
 
 class Character extends Model {
@@ -172,7 +164,33 @@ Character.init({
     tableName: "character",
     sequelize
 });
-Character.sync();
+//Character.sync();
+
+
+class CharacterAchievement extends Model {
+    public characterId!: number;
+    public achievementId!: number;
+    public achievementOptionId!: number;
+    public id!: number;
+}
+CharacterAchievement.init({
+    characterId: {
+        type: DataTypes.NUMBER,
+        allowNull: false
+    },
+    achievementId: {
+        type: DataTypes.NUMBER,
+        allowNull: false
+    },
+    achievementOptionId: {
+        type: DataTypes.NUMBER,
+        allowNull: false
+    }
+}, {
+    tableName: "character_achievements",
+    sequelize
+});
+//CharacterAchievement.sync();
 
 
 // set One-To-Many on Server - Tribes
@@ -187,7 +205,40 @@ Achopt.belongsTo(Achcat, {foreignKey: 'categoryId', onDelete: 'RESTRICT', onUpda
 Achcat.hasMany(Achievement, {foreignKey: 'categoryId', onDelete: 'RESTRICT', onUpdate: 'CASCADE'});
 Achievement.belongsTo(Achcat, {foreignKey: 'categoryId', onDelete: 'RESTRICT', onUpdate: 'CASCADE'});
 
-// use sync to create tables
+Character.hasMany(CharacterAchievement, {foreignKey: 'characterId', onDelete: 'RESTRICT', onUpdate: 'CASCADE'});
+CharacterAchievement.belongsTo(Character);
+
+Achievement.hasMany(CharacterAchievement, {foreignKey: 'achievementId', onDelete: 'RESTRICT', onUpdate: 'CASCADE'});
+CharacterAchievement.belongsTo(Achievement);
+
+Achopt.hasMany(CharacterAchievement, {foreignKey: 'achievementOptionId', onDelete: 'RESTRICT', onUpdate: 'CASCADE'});
+CharacterAchievement.belongsTo(Achopt);
+
+// sync all tables
+User.sync();
+Server.sync();
+Tribe.sync();
+Achcat.sync();
+Achopt.sync();
+Achievement.sync();
+Character.sync();
+CharacterAchievement.sync();
+
+
+Server.findAll()
+    .then(response => {
+        console.log("Server.findAllResponse", response)
+        if(response.length == 0) {
+            console.log("ImportDemoData")
+            importDemoData()
+        }
+        else {
+            console.log("NoImportDemoData")
+        }
+    })
+    .catch(error => console.log("findAll error", error))
+
+/*
 sequelize.sync({alter: true})
     .then(response => {
         console.log("Relations response", response);
@@ -204,5 +255,5 @@ sequelize.sync({alter: true})
             })
     })
     .catch(error => console.log("relations error", error))
-
-export { User, Server, Tribe, Achcat, Achopt, Achievement, Character }
+*/
+export { User, Server, Tribe, Achcat, Achopt, Achievement, Character, CharacterAchievement }

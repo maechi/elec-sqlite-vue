@@ -1,9 +1,9 @@
 // todo this file provides an API to interact with the db server
-import {Achcat, Achievement} from "../dbModels"
+import {Achcat, Achopt, Achievement, CharacterAchievement} from "../dbModels"
 class NewAchievement {
     achievementName: string;
     categoryId: number | null;
-    bonusLevel: boolean;
+    bonusLevel: number | null;
     singleMode: boolean;
     showSum: boolean;
     id?: number;
@@ -11,7 +11,7 @@ class NewAchievement {
     constructor() {
         this.achievementName = '';
         this.categoryId = null;
-        this.bonusLevel = false;
+        this.bonusLevel = null;
         this.singleMode = false;
         this.showSum = false;
         this.id = undefined;
@@ -20,6 +20,16 @@ class NewAchievement {
 
 const getAllAchievements = async () => {
     const achievements = await Achievement.findAll({include: Achcat})
+    return achievements
+}
+const getAllAchievementsWithOptions = async () => {
+    const achievements = await Achievement.findAll({
+        include: [
+            {model: Achcat,
+                include: [Achopt]
+            },
+            {model: CharacterAchievement}
+            ]})
     return achievements
 }
 
@@ -54,4 +64,4 @@ const destroyAchievement = async (achievement: NewAchievement) => {
         }
     });
 }
-export { getAllAchievements, createAchievement, updateAchievement, destroyAchievement, NewAchievement }
+export { getAllAchievements, getAllAchievementsWithOptions, createAchievement, updateAchievement, destroyAchievement, NewAchievement }
