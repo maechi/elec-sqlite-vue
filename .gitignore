@@ -28,4 +28,3 @@ package-lock.json
 src/data.db
 src/data.db.bak
 yarn.lock
-src/data.db
